@@ -4,25 +4,66 @@
     <script src="sockjs.min.js"></script>
     <script src='vertx-eventbus.js'></script>
 
+    <style>
+      .tweetBox {
+        border: 1px solid black;
+        padding: 2px;
+        margin: 2px;
+      }
+    </style>
+
     <script>
-
-        var eb = new EventBus('http://localhost:8080/eventbus');
-
-        eb.onopen = function() {
-
-            // set a handler to receive a message
-            eb.registerHandler('tweet.stream', function(error, message) {
-              var tweetSpace = document.getElementById("tweets");
-              if (tweetSpace.childElementCount>20) {
-                  tweetSpace.removeChild(tweetSpace.lastElementChild);
-              }
-              var newElement = document.createElement("div");
-              newElement.innerHTML = message.body;
-              newElement.style.padding = '4px;';
-              tweetSpace.insertBefore(newElement, tweetSpace.firstElementChild);
-            });
+        function format(tweetBody) {
+            var webLinks = tweetBody.replace(/(https?:\/\/[^ ]*)/g, '<a href="$1" target="_blank">$1</a>');
+            var hashLinks = webLinks.replace(/#([^ ]*)/g, '#<a href="https://twitter.com/hashtag/$1?src=hash" target="_blank">#$1</a>');
+            return hashLinks.replace(/@([^ ]*)/g, '<a href="https://twitter.com/$1" target="_blank">@$1</a>');
         }
 
+        var eb = {};
+        var backoff = 0;
+
+        function initEventBus() {
+            console.log("Attempting to connect to the eventbus.");
+
+            // Create an instance of the Vert.x event bus.
+            eb = new EventBus("http://localhost:8080/eventbus/");
+
+            // Once the event bus connection is established, enable the form input field and register a listener for server
+            // messages.
+            eb.onopen = function () {
+                console.log("Eventbus connected.");
+                backoff = 0;
+
+                // set a handler to receive a message
+                eb.registerHandler('tweet.stream', function(error, message) {
+                  var tweetSpace = document.getElementById("tweets");
+                  if (tweetSpace.childElementCount>20) {
+                      tweetSpace.removeChild(tweetSpace.lastElementChild);
+                  }
+                  var newElement = document.createElement("div");
+                  newElement.innerHTML = format(message.body);
+                  newElement.className = 'tweetBox';
+                  tweetSpace.insertBefore(newElement, tweetSpace.firstElementChild);
+                });
+            };
+
+            // When the event bus connection closes, attempt to reconnect. If reconnect fails multiple times the reconnection
+            // attempts get slower until it tries every 10 seconds. Also, disables the input form element to prevent typing.
+            eb.onclose = function() {
+                console.log("Eventbus connection lost.");
+                if (backoff<10000) {
+                    backoff += 1000;
+                }
+
+                // Tell the browser to reconnect the eventbus in 'backoff' milliseconds.
+                window.setTimeout(function() {
+                    initEventBus();
+                }, backoff);
+            };
+        }
+
+        // Initialize the event bus and event handlers.
+        initEventBus();
     </script>
   </head>
   <h1>Vert.x Tweet Bridges</h1>

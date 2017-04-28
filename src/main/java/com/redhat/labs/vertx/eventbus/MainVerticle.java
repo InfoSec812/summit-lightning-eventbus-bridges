@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainVerticle extends AbstractVerticle {
 
@@ -26,7 +29,16 @@ public class MainVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-        CamelContext camel = new DefaultCamelContext();
+        List<String> keywords = new ArrayList<>();
+        keywords.add("#openinnovationlabs");
+        keywords.add("#RHSummit");
+        keywords.add("#RedHat");
+        keywords.add("#Vertx");
+        keywords.add("#infinispan");
+        keywords.add("#openshift");
+        keywords.add("#reactive");
+        keywords.add("#openshift");
+            CamelContext camel = new DefaultCamelContext();
 
         try {
             camel.addRoutes(new RouteBuilder() {
@@ -42,12 +54,11 @@ public class MainVerticle extends AbstractVerticle {
                     LOG.debug(config.encodePrettily());
 
                     // stream twitter search for new tweets
-                    String uri = "twitter://streaming/filter?type=event&lang=en&keywords=" + URLEncoder.encode("#RHSummit,#RedHat,#Vertx,#infinispan,#openshift", "utf8");
+                    String uri = "twitter://streaming/filter?type=event&lang=en&keywords=" + URLEncoder.encode(keywords.stream().collect(Collectors.joining(",")), "utf8");
 
                     from(uri)
                             .filter(body().isNotNull())
                             .filter(body().isInstanceOf(Status.class))
-                            .throttle(1).timePeriodMillis(250)
                             .filter(simple("${body.retweet} == false"))
                             .transform(simple("${body.text}"))
                             .to("direct:tweets");
@@ -69,7 +80,7 @@ public class MainVerticle extends AbstractVerticle {
         router.route("/eventbus/*").handler(sockJSHandler);
 
         // Static content handler pointing to the "webroot" contained in src/main/resources
-        router.route("/*").handler(StaticHandler.create("webroot"));
+        router.route("/*").handler(StaticHandler.create("webroot").setCachingEnabled(false));
 
         vertx.createHttpServer().requestHandler(router::accept).listen(8080);
 

@@ -10,3 +10,5 @@ buildNumber.properties
 .mvn/**
 config.json
 extended-eventbus.iml
+.vertx/**
+vertx-start-process.id
