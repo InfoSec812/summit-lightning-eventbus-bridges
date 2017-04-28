@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" name="vertx-twitter-bridges">
+    <Appenders>
+        <Console name="STDOUT">
+            <RFC5424Layout newLine="true" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="STDOUT" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Vert.x Event Bus Bridge Example</title>
+    <script src="sockjs.min.js"></script>
+    <script src='vertx-eventbus.js'></script>
+
+    <script>
+
+        var eb = new EventBus('http://localhost:8080/eventbus');
+
+        eb.onopen = function() {
+
+            // set a handler to receive a message
+            eb.registerHandler('tweet.stream', function(error, message) {
+              var tweetSpace = document.getElementById("tweets");
+              if (tweetSpace.childElementCount>20) {
+                  tweetSpace.removeChild(tweetSpace.lastElementChild);
+              }
+              var newElement = document.createElement("div");
+              newElement.innerHTML = message.body;
+              newElement.style.padding = '4px;';
+              tweetSpace.insertBefore(newElement, tweetSpace.firstElementChild);
+            });
+        }
+
+    </script>
+  </head>
+  <h1>Vert.x Tweet Bridges</h1>
+  <div id="tweets">
+
+  </div>
+</html>
