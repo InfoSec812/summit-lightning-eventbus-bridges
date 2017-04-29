@@ -6,16 +6,20 @@
 
     <style>
       .tweetBox {
-        border: 1px solid black;
-        padding: 2px;
-        margin: 2px;
+        border: 1px solid #888888;
+        border-radius: 4px;
+        box-shadow: 4px 4px 3px #888888;
+        padding: 5px;
+        font-size: 14pt;
+        margin: 2px 2px 15px 2px;
+        background: white;
       }
     </style>
 
     <script>
         function format(tweetBody) {
             var webLinks = tweetBody.replace(/(https?:\/\/[^ ]*)/g, '<a href="$1" target="_blank">$1</a>');
-            var hashLinks = webLinks.replace(/#([^ ]*)/g, '#<a href="https://twitter.com/hashtag/$1?src=hash" target="_blank">#$1</a>');
+            var hashLinks = webLinks.replace(/#([^ ]*)/g, '<a href="https://twitter.com/hashtag/$1?src=hash" target="_blank">#$1</a>');
             return hashLinks.replace(/@([^ ]*)/g, '<a href="https://twitter.com/$1" target="_blank">@$1</a>');
         }
 
