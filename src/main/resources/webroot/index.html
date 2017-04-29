@@ -19,8 +19,8 @@
     <script>
         function format(tweetBody) {
             var webLinks = tweetBody.replace(/(https?:\/\/[^ ]*)/g, '<a href="$1" target="_blank">$1</a>');
-            var hashLinks = webLinks.replace(/#([^ ]*)/g, '<a href="https://twitter.com/hashtag/$1?src=hash" target="_blank">#$1</a>');
-            return hashLinks.replace(/@([^ ]*)/g, '<a href="https://twitter.com/$1" target="_blank">@$1</a>');
+            var hashLinks = webLinks.replace(/#([^ .]*)/g, '<a href="https://twitter.com/hashtag/$1?src=hash" target="_blank">#$1</a>');
+            return hashLinks.replace(/@([^ .]*)/g, '<a href="https://twitter.com/$1" target="_blank">@$1</a>');
         }
 
         var eb = {};
