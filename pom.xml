@@ -42,7 +42,21 @@
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-camel-bridge</artifactId>
+            <artifactId>vertx-sql-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-jdbc-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.5.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -144,7 +158,7 @@
                         </goals>
 
                         <!-- optional: default phase is "generate-resources" -->
-                        <phase>compile</phase>
+                        <phase>generate-resources</phase>
 
                         <configuration>
                             <!-- optional: The default argument is actually
@@ -174,11 +188,6 @@
                     <redeploy>true</redeploy>
                     <config>config.json</config>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
