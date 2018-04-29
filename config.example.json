@@ -2,5 +2,28 @@
   "twitter_access_token": "ACCESS_TOKEN",
   "twitter_access_secret": "ACCESS_SECRET",
   "twitter_consumer_key": "CONSUMER_KEY",
-  "twitter_consumer_secret": "CONSUMER_SECRET"
+  "twitter_consumer_secret": "CONSUMER_SECRET",
+  "keywords": [
+    "#hammers",
+    "#COYI",
+    "@WestHamUtd",
+    "@loucityfc",
+    "#LouCity",
+    "#whufc",
+    "#ICF",
+    "@ExWHUemployee",
+    "#ironarmy",
+    "#WestHamUnited",
+    "#westhamfamily",
+    "#ricericebaby",
+    "@CameronPL",
+    "@Magnusras11",
+    "@georgedavisfour"
+  ],
+  "db": {
+    "url": "jdbc:h2:file:./tweets;MODE=PostgreSQL;IGNORECASE=false",
+    "user": "sa",
+    "password": "",
+    "driver_class": "org.h2.Driver"
+  }
 }

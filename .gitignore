@@ -1,4 +1,5 @@
 .idea/**
+tweets*db
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -12,3 +13,4 @@ config.json
 extended-eventbus.iml
 .vertx/**
 vertx-start-process.id
+src/main/resources/webroot/**
